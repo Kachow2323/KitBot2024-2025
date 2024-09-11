@@ -24,17 +24,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private static final String CANBUS_NAME = "rio";
-  private final TalonFX rightFrontDriving = new TalonFX(1,CANBUS_NAME);
-  private final TalonFX leftFrontDriving = new TalonFX(2,CANBUS_NAME);
-  private final TalonFX rightBackDriving = new TalonFX(3,CANBUS_NAME);
-  private final TalonFX leftBackDriving = new TalonFX(4,CANBUS_NAME);
-
-  final DutyCycleOut leftOut = new DutyCycleOut(0.0);
-  final DutyCycleOut rightOut = new DutyCycleOut(0.0);
-  private final XboxController driverController = new XboxController(0);
-
-  private int printCount = 0;
   private RobotContainer m_robotContainer;
 
   /**
@@ -46,25 +35,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    var leftConfiguration = new TalonFXConfiguration();
-    var rightConfiguration = new TalonFXConfiguration();
-
-    leftConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    rightConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-
-
-    /* Set up followers to follow leaders */
-    leftBackDriving.setControl(new Follower(leftFrontDriving.getDeviceID(), false));
-    rightBackDriving.setControl(new Follower(rightFrontDriving.getDeviceID(), false));
-  
-    leftFrontDriving.setSafetyEnabled(true);
-    rightFrontDriving.setSafetyEnabled(true);
-
-    leftFrontDriving.getConfigurator().apply(leftConfiguration);
-    leftBackDriving.getConfigurator().apply(leftConfiguration);
-    rightFrontDriving.getConfigurator().apply(rightConfiguration);
-    rightBackDriving.getConfigurator().apply(rightConfiguration);
   }
 
   /**
@@ -82,26 +52,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    if (++printCount >= 10) {
-      printCount = 0;
-      System.out.println("Left out: " + leftFrontDriving.get());
-      System.out.println("Right out: " + rightBackDriving.get());
-      System.out.println("Left Pos: " + leftFrontDriving.getPosition());
-      System.out.println("Right Pos: " + rightFrontDriving.getPosition());
-    }
 
-    double leftWheelsControlArcade = driverController.getLeftY();
-    double rightWheelsControlArcade = driverController.getRightX();
 
-    leftOut.Output = leftWheelsControlArcade + rightWheelsControlArcade ;
-    rightOut.Output = leftWheelsControlArcade - rightWheelsControlArcade;
-
-    rightFrontDriving.setControl(rightOut);
-    leftFrontDriving.setControl(leftOut);
-
-    // Smart Dashboard is a Dashboard that displays values you want in real time
-    SmartDashboard.putNumber("Right Wheel Speed", rightWheelsControlArcade);
-    SmartDashboard.putNumber("Left Wheel Speed", leftWheelsControlArcade);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
