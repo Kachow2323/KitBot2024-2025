@@ -9,6 +9,8 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
+import frc.utils.States;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final DriveSubsystem m_robotDrive;
+  public final Shooter ShooterInstance;
 
   public static RobotContainer instance = null;
   public static final XboxController driverController = new XboxController(0);
@@ -60,6 +63,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_robotDrive = new DriveSubsystem();
+    ShooterInstance = Shooter.getInstance();
 
     m_robotDrive.setDefaultCommand(
       new RunCommand(
@@ -72,20 +76,19 @@ public class RobotContainer {
     configureBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
-    // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    
-
-    //driverController.driver_A().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    operator_X
+      .whileTrue(
+       new RunCommand(() -> 
+        { ShooterInstance.setShooterRPM(States.ShooterState.GOAL); 
+          }, ShooterInstance)
+      );
+        operator_Y
+      .whileTrue(
+       new RunCommand(() -> 
+        { ShooterInstance.setShooterRPM(States.ShooterState.FULL); 
+          }, ShooterInstance)
+      );
   }
 
   /**
