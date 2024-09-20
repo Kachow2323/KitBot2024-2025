@@ -16,4 +16,15 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final class ShooterConstants {
+    public static final double pidOutputLow = -1;
+    public static final double pidOutputHigh = 1;
+    public static double kP = 6e-5; //500:1 - 1.2
+    public static double kI = 0.0;
+    public static double kD = 0.0; // 500:1 - 0.3
+    public static double MaxRPM = 	11000;
+    public static double SoftCapRPM = 8000;
+    public static double DesiredRPM = 1000;
+    //(Target-Current)*kP + Target*kFF = output
+  }
 }
