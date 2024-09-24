@@ -33,8 +33,8 @@ private static final String CANBUS_NAME = "rio";
     var leftConfiguration = new TalonFXConfiguration();
     var rightConfiguration = new TalonFXConfiguration();
 
-    leftConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    rightConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    leftConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    rightConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 
 
@@ -57,8 +57,8 @@ private static final String CANBUS_NAME = "rio";
    * @return a command
    */
   public Command drive(double LeftWheelsControl, double RightWheelsControl) {
-    leftOut.Output = LeftWheelsControl + RightWheelsControl ;
-    rightOut.Output = LeftWheelsControl - RightWheelsControl;
+    leftOut.Output = LeftWheelsControl - RightWheelsControl ;
+    rightOut.Output = LeftWheelsControl + RightWheelsControl;
 
     rightFrontDriving.setControl(rightOut);
     leftFrontDriving.setControl(leftOut);
